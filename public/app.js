@@ -32,7 +32,7 @@
     localStorage.removeItem(historyKey());
   }
 
-  const socket = io();
+  const socket = window.__socket || io();
 
   // ── DOM refs ──
   const $ = (s) => document.querySelector(s);

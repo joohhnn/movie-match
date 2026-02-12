@@ -8,8 +8,32 @@
   <meta name="theme-color" content="#0a0a0a">
   <title>Movie Match 🍿</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* Inline loading screen — shows instantly before CSS/JS loads */
+    #loading-screen {
+      position: fixed; inset: 0; z-index: 9999;
+      background: #0a0a0a;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      transition: opacity 0.4s;
+    }
+    #loading-screen.hidden { opacity: 0; pointer-events: none; }
+    #loading-screen .logo { font-size: 48px; margin-bottom: 16px; }
+    #loading-screen h1 { font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-size: 28px; color: #fff; margin: 0; }
+    #loading-screen h1 span { color: #e50914; }
+    #loading-screen .dots { color: #888; font-size: 14px; margin-top: 12px; }
+    #loading-screen .dots::after { content: ''; animation: dots 1.5s steps(4, end) infinite; }
+    @keyframes dots { 0% { content: ''; } 25% { content: '.'; } 50% { content: '..'; } 75% { content: '...'; } }
+  </style>
 </head>
 <body>
+
+  <!-- LOADING SCREEN (shows instantly, hides when app ready) -->
+  <div id="loading-screen">
+    <div class="logo">🍿</div>
+    <h1>Movie <span>Match</span></h1>
+    <div class="dots">Warming up</div>
+  </div>
 
   <!-- LOBBY SCREEN -->
   <div id="lobby" class="screen active">
@@ -129,6 +153,14 @@
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
+  <script>
+    // Shared socket — created early so loading screen can react
+    window.__socket = io();
+    window.__socket.on('connect', () => {
+      const ls = document.getElementById('loading-screen');
+      if (ls) { ls.classList.add('hidden'); setTimeout(() => ls.remove(), 500); }
+    });
+  </script>
   <script src="app.js"></script>
 </body>
 </html>
