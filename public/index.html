@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#0a0a0a">
+  <title>Movie Match 🍿</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- LOBBY SCREEN -->
+  <div id="lobby" class="screen active">
+    <div class="logo">🍿</div>
+    <h1>Movie <span>Match</span></h1>
+    <p class="sub">Swipe together. Find your next Netflix binge. No account needed.</p>
+
+    <div class="lobby-actions" id="lobby-main">
+      <button class="btn btn-primary" id="btn-create">🎬 Create Room</button>
+      <button class="btn btn-secondary" id="btn-show-join">🔗 Join Room</button>
+    </div>
+
+    <div class="join-form hidden" id="join-form">
+      <input type="text" id="room-input" maxlength="4" inputmode="numeric" pattern="[0-9]*" placeholder="Code">
+      <button class="btn btn-primary" id="btn-join" style="padding:16px 20px">Join</button>
+    </div>
+
+    <p class="error-msg" id="lobby-error"></p>
+
+    <div class="room-info hidden" id="room-info">
+      <div>
+        <div class="label">Room Code</div>
+        <div class="code" id="display-code"></div>
+      </div>
+      <div class="status">
+        <span class="status-dot waiting" id="status-dot"></span>
+        <span id="status-text" style="font-size:12px;color:var(--text2);margin-left:6px">Waiting...</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- APP SCREEN -->
+  <div id="app-screen" class="screen">
+    <div class="app-header">
+      <div class="title">Movie <span>Match</span></div>
+      <div class="room-badge">Room <b id="header-code"></b></div>
+      <div class="partner-status">
+        <span class="status-dot" id="partner-dot"></span>
+        <span id="partner-text">Partner connected</span>
+      </div>
+    </div>
+
+    <!-- SWIPE TAB -->
+    <div id="tab-swipe" class="tab-content active">
+      <div class="card-container" id="card-container">
+        <div class="empty-state hidden" id="empty-state">
+          <div class="icon">🎬</div>
+          <h3>That's all for now!</h3>
+          <p style="color:var(--text2);font-size:14px">Check back later for more movies, or review your matches.</p>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="action-btn nope-btn" id="btn-nope">✕</button>
+        <button class="action-btn like-btn" id="btn-like">♥</button>
+      </div>
+    </div>
+
+    <!-- MATCHES TAB -->
+    <div id="tab-matches" class="tab-content">
+      <div class="matches-list" id="matches-list">
+        <div class="empty-state" id="matches-empty">
+          <div class="icon">💕</div>
+          <h3>No matches yet</h3>
+          <p style="color:var(--text2);font-size:14px">When you both swipe right on a movie, it'll show up here!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SETTINGS TAB -->
+    <div id="tab-settings" class="tab-content settings-tab">
+      <div class="setting-group">
+        <label>TMDB API Key</label>
+        <input type="text" id="api-key-input" placeholder="Enter your TMDB API key">
+        <p class="hint">Free at <a href="https://www.themoviedb.org/settings/api" target="_blank" style="color:var(--red)">themoviedb.org</a>. Leave blank to use sample movies.</p>
+      </div>
+      <div class="setting-group">
+        <label>Movie Queue</label>
+        <p class="hint">Already swiped movies won't appear again. Reset to see all movies from the start.</p>
+        <button class="btn btn-secondary" id="btn-reset" style="margin-top:8px;width:100%">🔄 Reset Queue</button>
+      </div>
+      <div class="setting-group">
+        <label>Room</label>
+        <p style="font-size:14px">Code: <b id="settings-code" style="color:var(--red);letter-spacing:3px"></b></p>
+        <button class="btn btn-leave" id="btn-leave" style="margin-top:12px;width:100%">Leave Room</button>
+      </div>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-nav">
+      <button class="nav-item active" data-tab="swipe">
+        <span class="icon">🎬</span>
+        <span>Swipe</span>
+      </button>
+      <button class="nav-item" data-tab="matches">
+        <span class="nav-icon-wrap">
+          <span class="icon">💕</span>
+          <span class="badge hidden" id="match-badge">0</span>
+        </span>
+        <span>Matches</span>
+      </button>
+      <button class="nav-item" data-tab="settings">
+        <span class="icon">⚙️</span>
+        <span>Settings</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- MATCH OVERLAY -->
+  <div class="match-overlay" id="match-overlay">
+    <div class="confetti-container" id="confetti"></div>
+    <h2>It's a <span>Match!</span> 🍿</h2>
+    <p class="match-sub">You both want to watch this!</p>
+    <img class="match-poster-big" id="match-poster" src="" alt="">
+    <div class="match-movie-title" id="match-title"></div>
+    <div class="match-movie-year" id="match-year"></div>
+    <button class="btn btn-primary" id="btn-dismiss-match">Keep Swiping</button>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
